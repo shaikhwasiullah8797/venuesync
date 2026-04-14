@@ -41,7 +41,7 @@ body {
 /* Sidebar */
 .sidebar {
     width: 260px;
-    background-color: var(--sidebar-bg);
+    background-color: rgba(9, 36, 24, 0.7); /* Dark Mist Green */
     border-right: 1px solid var(--border-color);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
@@ -443,4 +443,40 @@ body {
     .top-nav h1 {
         font-size: 1.5rem;
     }
+}
+
+/* --- Universal Button Micro-Animations --- */
+button, 
+.dispatch-btn, 
+#chat-mic, 
+#chat-send, 
+#ai-fab, 
+#view-food span[style*="cursor: pointer"] {
+    transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+    will-change: transform, box-shadow;
+}
+
+button:hover:not(:disabled),
+.dispatch-btn:hover,
+#chat-mic:hover,
+#chat-send:hover,
+#ai-fab:hover,
+#view-food span[style*="cursor: pointer"]:hover {
+    transform: translateY(-3px) scale(1.03) !important;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4) !important;
+    filter: brightness(1.15) !important;
+}
+
+button:active:not(:disabled),
+.nav-links li:active,
+#chat-mic:active,
+#chat-send:active,
+#ai-fab:active,
+#view-food span[style*="cursor: pointer"]:active {
+    transform: translateY(1px) scale(0.95) !important;
+    background-color: #a855f7 !important; /* Neon Purple */
+    color: white !important;
+    border-color: #d8b4fe !important;
+    box-shadow: 0 0 20px rgba(168, 85, 247, 0.8), inset 0 0 10px rgba(255, 255, 255, 0.5) !important;
+    transition: all 0.05s ease !important;
 }

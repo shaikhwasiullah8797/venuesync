@@ -1,14 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VenueSync - Real-Time Venue Experience</title>
-    <meta name="description" content="Enhance your physical event experience with real-time wait times and schedule syncing.">
+    <meta name="description"
+        content="Enhance your physical event experience with real-time wait times and schedule syncing.">
+    <!-- SEO Optimization -->
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#0b0f19">
     <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- Preconnect for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@400;700&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- Google Analytics (GA4) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-VENUE12345"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-VENUE12345');
+    </script>
+
+    <!-- Firebase SDK Import Map -->
+    <script type="importmap">
+      {
+        "imports": {
+          "firebase/app": "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js",
+          "firebase/database": "https://www.gstatic.com/firebasejs/10.9.0/firebase-database.js"
+        }
+      }
+    </script>
+    <script type="module" src="app.js" defer></script>
 </head>
+
 <body>
     <div class="app-container">
         <!-- Sidebar / Navigation -->
@@ -20,14 +52,20 @@
             <ul class="nav-links">
                 <li class="active" data-target="view-dashboard"><i class="fas fa-chart-pie"></i> Dashboard</li>
                 <li data-target="view-map"><i class="fas fa-map-marked-alt"></i> Map</li>
-                <li data-target="view-food"><i class="fas fa-hamburger"></i> Food & Drink</li>
-                <li data-target="view-info"><i class="fas fa-info-circle"></i> Info</li>
+                <li data-target="view-food"><i class="fas fa-hamburger" style="width:20px;"></i> <span
+                        data-lang-key="navFood">Food & Beverages</span></li>
+                <li data-target="view-info"><i class="fas fa-info-circle" style="width:20px;"></i> <span
+                        data-lang-key="navInfo">Analytics</span></li>
+                <li id="nav-sos"
+                    style="margin-top: 2rem; background: rgba(59, 130, 246, 0.1); border: 1px solid var(--accent-blue); color: var(--accent-blue); font-weight: 800; text-align: center; justify-content: center; border-radius: 8px; padding: 15px; cursor: pointer; transition: 0.3s;">
+                    <i class="fas fa-clipboard-list" style="margin-right: 8px;"></i> <span
+                        data-lang-key="navSos">Incident Feed</span></li>
             </ul>
             <div class="user-profile">
-                <div class="avatar">U</div>
+                <div class="avatar" style="background: var(--status-red);">OP</div>
                 <div class="user-info">
-                    <p class="name">User</p>
-                    <p class="ticket">Ticket: VIP-A12</p>
+                    <p class="name">Cmdr. Systems</p>
+                    <p class="ticket">Access: Level 10 (Root)</p>
                 </div>
             </div>
         </nav>
@@ -35,109 +73,214 @@
         <!-- Main Dashboard Content -->
         <main class="dashboard">
             <header class="top-nav">
-                <h1>Live Dashboard</h1>
-                <div class="time-display" id="current-time">00:00</div>
+                <h1 data-lang-key="navDashboard">Ops Command Center</h1>
+                <div style="display: flex; gap: 1rem; align-items: center;">
+                    <!-- AI Feature 4: Authentic Google Cloud Translation Widget -->
+                    <div id="google_translate_element" style="border-radius: 6px; overflow:hidden;"></div>
+                    <script type="text/javascript">
+                        function googleTranslateElementInit() {
+                            new google.translate.TranslateElement({
+                                pageLanguage: 'en',
+                                includedLanguages: 'en,hi,gu,pa,mr,bn,ta,te,kn,ml',
+                                layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+                            }, 'google_translate_element');
+                        }
+                    </script>
+                    <script type="text/javascript"
+                        src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+                    <div class="time-display" id="current-time">00:00</div>
+                </div>
             </header>
 
             <div id="view-dashboard" class="view-section active">
-            <div class="grid-container">
-                <!-- Live Events Sync Card -->
-                <section class="card span-2 event-sync" id="event-card">
-                    <div class="card-header" style="border-bottom: none; padding-bottom: 0;">
-                        <h3><i class="fas fa-film"></i> Live Multi-Hall Synchronization</h3>
-                        <span class="badge pulse-green">3 Active</span>
-                    </div>
-                    <div class="card-body" id="events-container" style="display: flex; flex-direction: column; gap: 1.5rem; padding-top: 1rem;">
-                        <!-- Events injected by JS -->
-                    </div>
-                </section>
+                <div class="grid-container">
+                    <!-- Live Events Sync Card -->
+                    <section class="card span-2 event-sync" id="event-card">
+                        <div class="card-header" style="border-bottom: none; padding-bottom: 0;">
+                            <h3 data-lang-key="titleEvents"><i class="fas fa-trophy"></i> Simultaneous Global Match
+                                Feeds</h3>
+                            <span class="badge pulse-green">3 Active</span>
+                        </div>
+                        <div class="card-body" id="events-container"
+                            style="display: flex; flex-direction: column; gap: 1.5rem; padding-top: 1rem;">
+                            <!-- Events injected by JS -->
+                        </div>
+                    </section>
 
-                <!-- Washroom Wait Times -->
-                <section class="card facility-wait" id="washrooms-card">
-                    <div class="card-header">
-                        <h3><i class="fas fa-restroom"></i> Washrooms</h3>
-                    </div>
-                    <div class="card-body list">
-                        <div class="facility-item" data-id="washroom-a">
-                            <span class="facility-name">Level 1 - North</span>
-                            <div class="wait-indicator">
-                                <span class="wait-time" id="wait-washroom-a">-- min</span>
-                                <div class="status-dot green"></div>
+                    <!-- Washroom Wait Times -->
+                    <section class="card facility-wait" id="washrooms-card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-restroom"></i> Washrooms <span
+                                    style="font-size: 0.85rem; font-weight: normal; color: var(--text-secondary); margin-left: 10px; background: rgba(255,255,255,0.05); padding: 2px 8px; border-radius: 10px;">(Estimated
+                                    Wait Time)</span></h3>
+                        </div>
+                        <div class="card-body list">
+                            <div class="facility-item" data-id="washroom-a">
+                                <span class="facility-name">Level 1 - North</span>
+                                <div class="wait-indicator">
+                                    <span class="wait-time" id="wait-washroom-a">-- min</span>
+                                    <div class="status-dot green"></div>
+                                </div>
+                            </div>
+                            <div class="facility-item" data-id="washroom-b">
+                                <span class="facility-name">Level 1 - South</span>
+                                <div class="wait-indicator">
+                                    <span class="wait-time" id="wait-washroom-b">-- min</span>
+                                    <div class="status-dot green"></div>
+                                </div>
+                            </div>
+                            <div class="facility-item" data-id="washroom-c">
+                                <span class="facility-name">Level 2 - VIP</span>
+                                <div class="wait-indicator">
+                                    <span class="wait-time" id="wait-washroom-c">-- min</span>
+                                    <div class="status-dot green"></div>
+                                </div>
                             </div>
                         </div>
-                        <div class="facility-item" data-id="washroom-b">
-                            <span class="facility-name">Level 1 - South</span>
-                            <div class="wait-indicator">
-                                <span class="wait-time" id="wait-washroom-b">-- min</span>
-                                <div class="status-dot green"></div>
-                            </div>
-                        </div>
-                        <div class="facility-item" data-id="washroom-c">
-                            <span class="facility-name">Level 2 - VIP</span>
-                            <div class="wait-indicator">
-                                <span class="wait-time" id="wait-washroom-c">-- min</span>
-                                <div class="status-dot green"></div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
+                    </section>
 
-                <!-- Food Court Wait Times -->
-                <section class="card facility-wait" id="foodcourt-card">
-                    <div class="card-header">
-                        <h3><i class="fas fa-utensils"></i> Food Courts</h3>
-                    </div>
-                    <div class="card-body list">
-                        <div class="facility-item" data-id="food-a">
-                            <span class="facility-name">Popcorn Plaza</span>
-                            <div class="wait-indicator">
-                                <span class="wait-time" id="wait-food-a">-- min</span>
-                                <div class="status-dot yellow"></div>
+                    <!-- Food Court Wait Times -->
+                    <section class="card facility-wait" id="foodcourt-card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-utensils"></i> Food Courts <span
+                                    style="font-size: 0.85rem; font-weight: normal; color: var(--text-secondary); margin-left: 10px; background: rgba(255,255,255,0.05); padding: 2px 8px; border-radius: 10px;">(Estimated
+                                    Wait Time)</span></h3>
+                        </div>
+                        <div class="card-body list">
+                            <div class="facility-item" data-id="food-a">
+                                <span class="facility-name">Popcorn Plaza</span>
+                                <div class="wait-indicator">
+                                    <span class="wait-time" id="wait-food-a">-- min</span>
+                                    <div class="status-dot yellow"></div>
+                                </div>
+                            </div>
+                            <div class="facility-item" data-id="food-b">
+                                <span class="facility-name">Burger Grill</span>
+                                <div class="wait-indicator">
+                                    <span class="wait-time" id="wait-food-b">-- min</span>
+                                    <div class="status-dot red"></div>
+                                </div>
+                            </div>
+                            <div class="facility-item" data-id="food-c">
+                                <span class="facility-name">Drinks Kiosk</span>
+                                <div class="wait-indicator">
+                                    <span class="wait-time" id="wait-food-c">-- min</span>
+                                    <div class="status-dot green"></div>
+                                </div>
                             </div>
                         </div>
-                        <div class="facility-item" data-id="food-b">
-                            <span class="facility-name">Burger Grill</span>
-                            <div class="wait-indicator">
-                                <span class="wait-time" id="wait-food-b">-- min</span>
-                                <div class="status-dot red"></div>
-                            </div>
+                    </section>
+
+                    <!-- Live Updates / Notifications -->
+                    <section class="card span-2 updates">
+                        <div class="card-header">
+                            <h3><i class="fas fa-bell"></i> Live Updates</h3>
                         </div>
-                        <div class="facility-item" data-id="food-c">
-                            <span class="facility-name">Drinks Kiosk</span>
-                            <div class="wait-indicator">
-                                <span class="wait-time" id="wait-food-c">-- min</span>
-                                <div class="status-dot green"></div>
-                            </div>
+                        <div class="card-body">
+                            <ul id="update-log" class="update-log">
+                                <!-- Updates will be injected here -->
+                            </ul>
                         </div>
-                    </div>
-                </section>
-                
-                <!-- Live Updates / Notifications -->
-                <section class="card span-2 updates">
-                    <div class="card-header">
-                        <h3><i class="fas fa-bell"></i> Live Updates</h3>
-                    </div>
-                    <div class="card-body">
-                        <ul id="update-log" class="update-log">
-                            <!-- Updates will be injected here -->
-                        </ul>
-                    </div>
-                </section>
-            </div>
+                    </section>
+                </div>
             </div>
 
             <!-- MAP VIEW -->
             <div id="view-map" class="view-section" style="display:none;">
                 <div class="card map-card">
-                    <div class="card-header">
-                        <h3><i class="fas fa-map-marked-alt"></i> Interactive Venue Map</h3>
-                        <span class="badge pulse-green">Live Map</span>
+                    <div class="card-header" style="flex-wrap: wrap; gap: 1rem;">
+                        <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+                            <h3 style="margin: 0;"><i class="fas fa-sitemap"></i> Interactive Indoor Map</h3>
+                            <span class="badge pulse-green">Venue Layout</span>
+                        </div>
                     </div>
-                    <div class="card-body" style="padding: 1.5rem; text-align: center;">
-                        <img src="venue_map.png" alt="High-tech Venue Map" style="max-width: 100%; height: auto; border-radius: 8px; border: 1px solid var(--border-color); box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);">
-                        <p style="color: var(--text-secondary); margin-top: 1rem; font-size: 0.9rem;">
-                            <i class="fas fa-info-circle" style="color: var(--accent-neon);"></i> Displaying real-time venue layout mapping.
-                        </p>
+                    <div class="card-body"
+                        style="padding: 0; text-align: center; height: auto; min-height: 500px; position: relative; background: var(--bg-card); border-radius: 0 0 12px 12px;">
+                        <!-- Premium Stadium Grid Layout -->
+                        <div class="stadium-map"
+                            style="display: grid; grid-template-columns: 1fr 2fr 1fr; grid-template-rows: 90px 240px 90px; gap: 12px; width: 100%; height: 100%; padding: 15px; box-sizing: border-box; background: radial-gradient(circle at center, rgba(30, 215, 96, 0.05) 0%, rgba(0,0,0,0.6) 100%);">
+
+                            <!-- North Gate (Top) -->
+                            <div style="grid-column: 1 / 4; background: rgba(59, 130, 246, 0.1); border: 1px dashed var(--accent-blue); border-radius: 8px; display: flex; align-items: center; justify-content: center; gap: 15px; cursor: pointer; transition: 0.3s;"
+                                onmouseover="this.style.background='rgba(59, 130, 246, 0.2)';"
+                                onmouseout="this.style.background='rgba(59, 130, 246, 0.1)';">
+                                <i class="fas fa-door-open" style="font-size: 1.5rem; color: var(--accent-blue);"></i>
+                                <div style="text-align: left;">
+                                    <strong
+                                        style="color: white; font-size: 1.1rem; display:block; margin-bottom: 2px;">North
+                                        Gate (Main Entrance)</strong>
+                                    <span style="font-size: 0.85rem; color: var(--text-secondary);">Turnstiles
+                                        1-15</span>
+                                </div>
+                            </div>
+
+                            <!-- West Concourse (Left) -->
+                            <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: space-evenly; cursor: pointer; transition: 0.3s;"
+                                onmouseover="this.style.background='rgba(255, 255, 255, 0.08)';"
+                                onmouseout="this.style.background='rgba(255, 255, 255, 0.03)';">
+                                <div style="text-align:center;">
+                                    <i class="fas fa-tshirt"
+                                        style="font-size: 1.6rem; color: var(--text-secondary); margin-bottom:6px; display:block;"></i>
+                                    <span style="color: white; font-size: 0.95rem; font-weight:bold;">Merch</span>
+                                </div>
+                                <div style="text-align:center;">
+                                    <i class="fas fa-restroom"
+                                        style="font-size: 1.6rem; color: var(--text-secondary); margin-bottom:6px; display:block;"></i>
+                                    <span style="color: white; font-size: 0.95rem; font-weight:bold;">Restrooms</span>
+                                </div>
+                            </div>
+
+                            <!-- Main Pitch / Field (Center) -->
+                            <div style="background: rgba(30, 215, 96, 0.15); border: 2px solid var(--status-green); border-radius: 120px; display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: inset 0 0 30px rgba(30,215,96,0.2), 0 0 20px rgba(30,215,96,0.1); position: relative; overflow: hidden; transition: 0.4s;"
+                                onmouseover="this.style.transform='scale(1.02)'; this.style.background='rgba(30, 215, 96, 0.25)';"
+                                onmouseout="this.style.transform='scale(1)'; this.style.background='rgba(30, 215, 96, 0.15)';">
+                                <div
+                                    style="position: absolute; width: 2px; height: 100%; background: rgba(30,215,96,0.4); left: 50%; transform: translateX(-50%);">
+                                </div>
+                                <div
+                                    style="position: absolute; width: 70px; height: 70px; border: 2px solid rgba(30,215,96,0.4); border-radius: 50%; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+                                </div>
+
+                                <i class="fas fa-futbol"
+                                    style="font-size: 2.8rem; color: var(--status-green); margin-bottom: 10px; z-index: 2;"></i>
+                                <strong
+                                    style="color: white; font-size: 1.4rem; font-weight: 800; letter-spacing: 2px; z-index: 2; text-shadow: 0 2px 4px rgba(0,0,0,0.8);">MAIN
+                                    PITCH</strong>
+                                <span
+                                    style="font-size: 0.9rem; color: var(--status-green); font-weight: 600; z-index: 2; text-shadow: 0 2px 4px rgba(0,0,0,0.8);">(Live
+                                    Event Area)</span>
+                            </div>
+
+                            <!-- East Concourse (Right) -->
+                            <div style="background: rgba(255, 215, 0, 0.05); border: 1px solid rgba(255,215,0,0.2); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: space-evenly; cursor: pointer; transition: 0.3s;"
+                                onmouseover="this.style.background='rgba(255, 215, 0, 0.15)';"
+                                onmouseout="this.style.background='rgba(255, 215, 0, 0.05)';">
+                                <div style="text-align:center;">
+                                    <i class="fas fa-crown"
+                                        style="font-size: 1.6rem; color: #FFD700; margin-bottom:6px; display:block;"></i>
+                                    <span style="color: white; font-size: 0.95rem; font-weight:bold;">VIP Suites</span>
+                                </div>
+                                <div style="text-align:center;">
+                                    <i class="fas fa-first-aid"
+                                        style="font-size: 1.6rem; color: var(--status-red); margin-bottom:6px; display:block;"></i>
+                                    <span style="color: white; font-size: 0.95rem; font-weight:bold;">Medical HQ</span>
+                                </div>
+                            </div>
+
+                            <!-- South Gate & Food (Bottom) -->
+                            <div style="grid-column: 1 / 4; background: rgba(255, 165, 0, 0.1); border: 2px solid var(--status-yellow); border-radius: 8px; display: flex; align-items: center; justify-content: center; gap: 20px; cursor: pointer; transition: 0.3s;"
+                                onmouseover="this.style.background='rgba(255, 165, 0, 0.2)';"
+                                onmouseout="this.style.background='rgba(255, 165, 0, 0.1)';">
+                                <i class="fas fa-hamburger" style="font-size: 2rem; color: var(--status-yellow);"></i>
+                                <div style="text-align: left;">
+                                    <strong
+                                        style="color: white; display: block; font-size: 1.1rem; margin-bottom: 2px;">South
+                                        Gate & Concourse</strong>
+                                    <span style="font-size: 0.9rem; color: var(--text-secondary);">Popcorn Plaza, Drinks
+                                        Kiosk, Gate B</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -151,17 +294,188 @@
                     <div class="card-body list">
                         <div class="facility-item">
                             <div style="display:flex; flex-direction:column; gap:0.3rem;">
-                                <span class="facility-name">Popcorn Plaza</span>
-                                <span style="font-size:0.85rem; color:var(--text-secondary);">Level 1 - Snacks & Drinks</span>
+                                <span class="facility-name">Premium Samosa (2 pcs)</span>
+                                <span style="font-size:0.85rem; color:var(--text-secondary);">Hot & Crispy snacks</span>
                             </div>
-                            <span style="padding: 0.4rem 1rem; background: var(--accent-blue); border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='var(--accent-neon)'" onmouseout="this.style.background='var(--accent-blue)'">Pre-order</span>
+                            <div style="display:flex; align-items:center; gap: 1.5rem;">
+                                <span style="font-size: 1.1rem; font-weight: 700; color: var(--accent-neon);">₹99</span>
+                                <span
+                                    style="padding: 0.4rem 1rem; background: var(--accent-blue); border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.2s;"
+                                    onmouseover="this.style.background='var(--accent-neon)'"
+                                    onmouseout="this.style.background='var(--accent-blue)'">Add +</span>
+                            </div>
                         </div>
+
                         <div class="facility-item">
                             <div style="display:flex; flex-direction:column; gap:0.3rem;">
-                                <span class="facility-name">Burger Grill</span>
-                                <span style="font-size:0.85rem; color:var(--text-secondary);">Level 2 - Meals</span>
+                                <span class="facility-name">Classic Large Popcorn</span>
+                                <span style="font-size:0.85rem; color:var(--text-secondary);">Butter-salted cinema
+                                    style</span>
                             </div>
-                            <span style="padding: 0.4rem 1rem; background: var(--accent-blue); border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='var(--accent-neon)'" onmouseout="this.style.background='var(--accent-blue)'">Pre-order</span>
+                            <div style="display:flex; align-items:center; gap: 1.5rem;">
+                                <span
+                                    style="font-size: 1.1rem; font-weight: 700; color: var(--accent-neon);">₹299</span>
+                                <span
+                                    style="padding: 0.4rem 1rem; background: var(--accent-blue); border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.2s;"
+                                    onmouseover="this.style.background='var(--accent-neon)'"
+                                    onmouseout="this.style.background='var(--accent-blue)'">Add +</span>
+                            </div>
+                        </div>
+
+                        <div class="facility-item">
+                            <div style="display:flex; flex-direction:column; gap:0.3rem;">
+                                <span class="facility-name">Caramel Popcorn Tub</span>
+                                <span style="font-size:0.85rem; color:var(--text-secondary);">Sweet & crunchy
+                                    signature</span>
+                            </div>
+                            <div style="display:flex; align-items:center; gap: 1.5rem;">
+                                <span
+                                    style="font-size: 1.1rem; font-weight: 700; color: var(--accent-neon);">₹349</span>
+                                <span
+                                    style="padding: 0.4rem 1rem; background: var(--accent-blue); border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.2s;"
+                                    onmouseover="this.style.background='var(--accent-neon)'"
+                                    onmouseout="this.style.background='var(--accent-blue)'">Add +</span>
+                            </div>
+                        </div>
+
+                        <div class="facility-item">
+                            <div style="display:flex; flex-direction:column; gap:0.3rem;">
+                                <span class="facility-name">Paneer Tikka Sandwich</span>
+                                <span style="font-size:0.85rem; color:var(--text-secondary);">Grilled to
+                                    perfection</span>
+                            </div>
+                            <div style="display:flex; align-items:center; gap: 1.5rem;">
+                                <span
+                                    style="font-size: 1.1rem; font-weight: 700; color: var(--accent-neon);">₹149</span>
+                                <span
+                                    style="padding: 0.4rem 1rem; background: var(--accent-blue); border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.2s;"
+                                    onmouseover="this.style.background='var(--accent-neon)'"
+                                    onmouseout="this.style.background='var(--accent-blue)'">Add +</span>
+                            </div>
+                        </div>
+
+                        <div class="facility-item">
+                            <div style="display:flex; flex-direction:column; gap:0.3rem;">
+                                <span class="facility-name">Chicken Tikka Roll</span>
+                                <span style="font-size:0.85rem; color:var(--text-secondary);">Spicy chicken kebab
+                                    wrap</span>
+                            </div>
+                            <div style="display:flex; align-items:center; gap: 1.5rem;">
+                                <span
+                                    style="font-size: 1.1rem; font-weight: 700; color: var(--accent-neon);">₹199</span>
+                                <span
+                                    style="padding: 0.4rem 1rem; background: var(--accent-blue); border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.2s;"
+                                    onmouseover="this.style.background='var(--accent-neon)'"
+                                    onmouseout="this.style.background='var(--accent-blue)'">Add +</span>
+                            </div>
+                        </div>
+
+                        <div class="facility-item">
+                            <div style="display:flex; flex-direction:column; gap:0.3rem;">
+                                <span class="facility-name">Veg Supreme Burger</span>
+                                <span style="font-size:0.85rem; color:var(--text-secondary);">Aloo patty with herb
+                                    mayo</span>
+                            </div>
+                            <div style="display:flex; align-items:center; gap: 1.5rem;">
+                                <span
+                                    style="font-size: 1.1rem; font-weight: 700; color: var(--accent-neon);">₹129</span>
+                                <span
+                                    style="padding: 0.4rem 1rem; background: var(--accent-blue); border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.2s;"
+                                    onmouseover="this.style.background='var(--accent-neon)'"
+                                    onmouseout="this.style.background='var(--accent-blue)'">Add +</span>
+                            </div>
+                        </div>
+
+                        <div class="facility-item">
+                            <div style="display:flex; flex-direction:column; gap:0.3rem;">
+                                <span class="facility-name">Zinger Chicken Burger</span>
+                                <span style="font-size:0.85rem; color:var(--text-secondary);">Crispy fried chicken
+                                    breast</span>
+                            </div>
+                            <div style="display:flex; align-items:center; gap: 1.5rem;">
+                                <span
+                                    style="font-size: 1.1rem; font-weight: 700; color: var(--accent-neon);">₹179</span>
+                                <span
+                                    style="padding: 0.4rem 1rem; background: var(--accent-blue); border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.2s;"
+                                    onmouseover="this.style.background='var(--accent-neon)'"
+                                    onmouseout="this.style.background='var(--accent-blue)'">Add +</span>
+                            </div>
+                        </div>
+
+                        <div class="facility-item">
+                            <div style="display:flex; flex-direction:column; gap:0.3rem;">
+                                <span class="facility-name">Loaded Nachos</span>
+                                <span style="font-size:0.85rem; color:var(--text-secondary);">Crispy nachos with liquid
+                                    cheese</span>
+                            </div>
+                            <div style="display:flex; align-items:center; gap: 1.5rem;">
+                                <span
+                                    style="font-size: 1.1rem; font-weight: 700; color: var(--accent-neon);">₹249</span>
+                                <span
+                                    style="padding: 0.4rem 1rem; background: var(--accent-blue); border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.2s;"
+                                    onmouseover="this.style.background='var(--accent-neon)'"
+                                    onmouseout="this.style.background='var(--accent-blue)'">Add +</span>
+                            </div>
+                        </div>
+
+                        <div class="facility-item">
+                            <div style="display:flex; flex-direction:column; gap:0.3rem;">
+                                <span class="facility-name">Peri Peri Fries</span>
+                                <span style="font-size:0.85rem; color:var(--text-secondary);">Spicy potato fries</span>
+                            </div>
+                            <div style="display:flex; align-items:center; gap: 1.5rem;">
+                                <span
+                                    style="font-size: 1.1rem; font-weight: 700; color: var(--accent-neon);">₹119</span>
+                                <span
+                                    style="padding: 0.4rem 1rem; background: var(--accent-blue); border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.2s;"
+                                    onmouseover="this.style.background='var(--accent-neon)'"
+                                    onmouseout="this.style.background='var(--accent-blue)'">Add +</span>
+                            </div>
+                        </div>
+
+                        <div class="facility-item">
+                            <div style="display:flex; flex-direction:column; gap:0.3rem;">
+                                <span class="facility-name">Cola Beverage (Large)</span>
+                                <span style="font-size:0.85rem; color:var(--text-secondary);">Chilled fountain
+                                    drink</span>
+                            </div>
+                            <div style="display:flex; align-items:center; gap: 1.5rem;">
+                                <span style="font-size: 1.1rem; font-weight: 700; color: var(--accent-neon);">₹99</span>
+                                <span
+                                    style="padding: 0.4rem 1rem; background: var(--accent-blue); border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.2s;"
+                                    onmouseover="this.style.background='var(--accent-neon)'"
+                                    onmouseout="this.style.background='var(--accent-blue)'">Add +</span>
+                            </div>
+                        </div>
+
+                        <div class="facility-item">
+                            <div style="display:flex; flex-direction:column; gap:0.3rem;">
+                                <span class="facility-name">Cold Coffee Frappe</span>
+                                <span style="font-size:0.85rem; color:var(--text-secondary);">Thick blend with ice
+                                    cream</span>
+                            </div>
+                            <div style="display:flex; align-items:center; gap: 1.5rem;">
+                                <span
+                                    style="font-size: 1.1rem; font-weight: 700; color: var(--accent-neon);">₹149</span>
+                                <span
+                                    style="padding: 0.4rem 1rem; background: var(--accent-blue); border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.2s;"
+                                    onmouseover="this.style.background='var(--accent-neon)'"
+                                    onmouseout="this.style.background='var(--accent-blue)'">Add +</span>
+                            </div>
+                        </div>
+
+                        <div class="facility-item">
+                            <div style="display:flex; flex-direction:column; gap:0.3rem;">
+                                <span class="facility-name">Packaged Mineral Water</span>
+                                <span style="font-size:0.85rem; color:var(--text-secondary);">1000ml Bottle</span>
+                            </div>
+                            <div style="display:flex; align-items:center; gap: 1.5rem;">
+                                <span style="font-size: 1.1rem; font-weight: 700; color: var(--accent-neon);">₹40</span>
+                                <span
+                                    style="padding: 0.4rem 1rem; background: var(--accent-blue); border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.2s;"
+                                    onmouseover="this.style.background='var(--accent-neon)'"
+                                    onmouseout="this.style.background='var(--accent-blue)'">Add +</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -174,15 +488,57 @@
                         <h3><i class="fas fa-info-circle"></i> Venue Information</h3>
                     </div>
                     <div class="card-body">
-                        <h4 style="margin-bottom: 1rem; color: var(--accent-neon);">Venue Policies</h4>
-                        <ul style="list-style-position: inside; color: var(--text-secondary); line-height: 1.8; margin-bottom: 2rem;">
-                            <li>Outside food and drinks are not permitted.</li>
-                            <li>Please keep your ticket barcode handy for re-entry.</li>
-                            <li>Smoking is only allowed in designated outdoor areas.</li>
+                        <!-- SMART PARKING ANALYTICS (Feature 6) -->
+                        <h4
+                            style="margin-bottom: 1rem; color: var(--accent-neon); display:flex; align-items:center; gap: 8px;">
+                            <i class="fas fa-car-side"></i> Global Parking Heatmap</h4>
+                        <div
+                            style="background: rgba(255,255,255,0.03); border: 1px dashed var(--border-color); padding: 15px; border-radius: 8px; margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between;">
+                            <div><strong
+                                    style="color: white; font-size: 1.1rem; display: block; margin-bottom: 5px;">Lot A
+                                    (General)</strong><span
+                                    style="font-size: 0.9rem; color: var(--text-secondary);">Gate 1 & 2 Access</span>
+                            </div>
+                            <div style="text-align: right;"><span
+                                    style="background: rgba(239, 68, 68, 0.1); border: 1px solid var(--status-red); color: var(--status-red); padding: 5px 10px; border-radius: 6px; font-weight: bold;">98%
+                                    Full</span></div>
+                        </div>
+                        <div
+                            style="background: rgba(255,255,255,0.03); border: 1px dashed var(--border-color); padding: 15px; border-radius: 8px; margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between;">
+                            <div><strong
+                                    style="color: white; font-size: 1.1rem; display: block; margin-bottom: 5px;">Lot B
+                                    (VIP & Staff)</strong><span
+                                    style="font-size: 0.9rem; color: var(--text-secondary);">Gate 3 Access</span></div>
+                            <div style="text-align: right;"><span
+                                    style="background: rgba(30, 215, 96, 0.1); border: 1px solid var(--status-green); color: var(--status-green); padding: 5px 10px; border-radius: 6px; font-weight: bold;">42%
+                                    Full</span></div>
+                        </div>
+                        <div
+                            style="background: rgba(255,255,255,0.03); border: 1px dashed var(--border-color); padding: 15px; border-radius: 8px; margin-bottom: 2rem; display: flex; align-items: center; justify-content: space-between;">
+                            <div><strong
+                                    style="color: white; font-size: 1.1rem; display: block; margin-bottom: 5px;">Lot C
+                                    (Overflow)</strong><span
+                                    style="font-size: 0.9rem; color: var(--text-secondary);">South Exit Link</span>
+                            </div>
+                            <div style="text-align: right;"><span
+                                    style="background: rgba(255, 165, 0, 0.1); border: 1px solid var(--status-yellow); color: var(--status-yellow); padding: 5px 10px; border-radius: 6px; font-weight: bold;">75%
+                                    Full</span></div>
+                        </div>
+
+                        <h4 style="margin-bottom: 1rem; color: var(--accent-neon);">Operational Brief</h4>
+                        <ul
+                            style="list-style-position: inside; color: var(--text-secondary); line-height: 1.8; margin-bottom: 2rem;">
+                            <li>Medical teams placed on standby at East and West concourses.</li>
+                            <li>Security shift rotation occurs at 22:00 local time.</li>
                         </ul>
-                        <h4 style="margin-bottom: 1rem; color: var(--accent-neon);">Contact Support</h4>
-                        <p style="color: var(--text-secondary); margin-bottom: 1rem;">Need help with your ticket or seat? Contact our guest services.</p>
-                        <button style="padding: 0.8rem 1.5rem; background: rgba(59, 130, 246, 0.1); border: 1px solid var(--accent-blue); color: var(--text-primary); border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.3s;" onmouseover="this.style.background='rgba(59, 130, 246, 0.3)'" onmouseout="this.style.background='rgba(59, 130, 246, 0.1)'"><i class="fas fa-headset" style="margin-right: 0.5rem;"></i> Contact Guest Services</button>
+                        <h4 style="margin-bottom: 1rem; color: var(--accent-neon);">Staff Directory</h4>
+                        <p style="color: var(--text-secondary); margin-bottom: 1rem;">Direct communication channels to
+                            squad leaders.</p>
+                        <button
+                            style="padding: 0.8rem 1.5rem; background: rgba(59, 130, 246, 0.1); border: 1px solid var(--accent-blue); color: var(--text-primary); border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.3s;"
+                            onmouseover="this.style.background='rgba(59, 130, 246, 0.3)'"
+                            onmouseout="this.style.background='rgba(59, 130, 246, 0.1)'"><i class="fas fa-headset"
+                                style="margin-right: 0.5rem;"></i> Contact Guest Services</button>
                     </div>
                 </div>
             </div>
@@ -190,6 +546,89 @@
         </main>
     </div>
 
-    <script src="app.js"></script>
+    <!-- Playmaker AI Concierge FAB (Feature 3) -->
+    <div id="ai-fab"
+        style="position: fixed; bottom: 30px; right: 30px; width: 65px; height: 65px; background: linear-gradient(135deg, var(--accent-blue), var(--accent-neon)); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 10px 25px rgba(0, 204, 255, 0.4); z-index: 1000; transition: transform 0.3s; font-size: 1.8rem; color: white;">
+        <i class="fas fa-robot"></i>
+    </div>
+
+    <!-- Playmaker Chat UI (Hidden by default) -->
+    <div id="ai-chat-window"
+        style="display: none; position: fixed; bottom: 105px; right: 30px; width: 350px; height: 500px; background: var(--bg-main); border: 1px solid var(--border-color); border-radius: 16px; box-shadow: 0 15px 40px rgba(0,0,0,0.8); z-index: 1000; flex-direction: column; overflow: hidden; backdrop-filter: blur(15px);">
+        <div
+            style="padding: 15px 20px; background: rgba(59, 130, 246, 0.1); border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
+            <strong style="color: white; font-size: 1.1rem;"><i class="fas fa-robot"
+                    style="color: var(--accent-neon); margin-right: 8px;"></i> Playmaker AI</strong>
+            <i class="fas fa-times" id="close-chat"
+                style="color: var(--text-secondary); cursor: pointer; font-size: 1.2rem;"></i>
+        </div>
+        <div id="chat-messages"
+            style="flex-grow: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px;">
+            <div
+                style="background: rgba(255,255,255,0.05); padding: 12px 16px; border-radius: 12px; border-bottom-left-radius: 2px; color: var(--text-secondary); max-width: 85%; align-self: flex-start; font-size: 0.95rem; line-height: 1.5;">
+                Welcome! I'm Playmaker, your grounded AI Concierge.<br><br>Ask me about parking, seat routing, or live
+                stats!
+            </div>
+        </div>
+        <div
+            style="padding: 15px; border-top: 1px solid var(--border-color); display: flex; gap: 10px; background: rgba(0,0,0,0.2);">
+            <button id="chat-mic"
+                style="background: rgba(255,255,255,0.05); color: var(--text-secondary); border: 1px solid var(--border-color); border-radius: 50%; width: 45px; height: 45px; cursor: pointer; transition: 0.2s;"><i
+                    class="fas fa-microphone"></i></button>
+            <input type="text" id="chat-input" placeholder="Ask AI..."
+                style="flex-grow: 1; padding: 12px 15px; border-radius: 25px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.5); color: white; outline: none; font-family: 'Inter', sans-serif;">
+            <button id="chat-send"
+                style="background: var(--accent-blue); color: white; border: none; border-radius: 50%; width: 45px; height: 45px; cursor: pointer; transition: 0.2s;"><i
+                    class="fas fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+    <!-- Smart Overlay Route Notification Container (Feature 1) -->
+    <div id="route-overlay"
+        style="position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 2000; width: 90%; max-width: 600px; display: flex; flex-direction: column; gap: 10px; pointer-events: none;">
+    </div>
+
+    <!-- Incident Feed Modal (Feature 5) -->
+    <div id="sos-modal"
+        style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.85); z-index: 3000; align-items: center; justify-content: center; backdrop-filter: blur(8px);">
+        <div
+            style="background: var(--bg-card); border: 2px solid var(--border-color); border-radius: 16px; width: 90%; max-width: 600px; padding: 30px; box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2 style="color: white; font-weight: 800;"><i class="fas fa-shield-alt"
+                        style="color: var(--accent-neon); margin-right: 10px;"></i> Live Incident Feed</h2>
+                <i class="fas fa-times" id="sos-cancel"
+                    style="color: var(--text-secondary); cursor: pointer; font-size: 1.5rem;"></i>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 15px;">
+                <!-- Incident 1 -->
+                <div class="incident-card"
+                    style="background: rgba(239, 68, 68, 0.1); border-left: 4px solid var(--status-red); padding: 15px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <strong style="color: white; display: block; margin-bottom: 5px;">Medical Emergency</strong>
+                        <span style="color: var(--text-secondary); font-size: 0.9rem;">Reported in Sector 4, Row G. Fan
+                            collapsed.</span>
+                    </div>
+                    <button class="dispatch-btn"
+                        style="background: var(--status-red); color: white; border: none; padding: 8px 15px; border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.2s;">Dispatch
+                        Medics</button>
+                </div>
+                <!-- Incident 2 -->
+                <div class="incident-card"
+                    style="background: rgba(255, 165, 0, 0.1); border-left: 4px solid var(--status-yellow); padding: 15px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <strong style="color: white; display: block; margin-bottom: 5px;">Lost Item / Bag</strong>
+                        <span style="color: var(--text-secondary); font-size: 0.9rem;">Black backpack left near Gate C
+                            turnstiles.</span>
+                    </div>
+                    <button class="dispatch-btn"
+                        style="background: var(--status-yellow); color: black; border: none; padding: 8px 15px; border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.2s;">Send
+                        Guard</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </body>
+
 </html>
